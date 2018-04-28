@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    tower_cli: "/home/skamithi/tower-cli/bin/tower-cli"
+    tower_action: create
+    tower_url: "https://192.168.121.89"
+    tower_user: "admin"
+    tower_pass: "tower"
+    projects:
+      - name: Test run
+        descr: Test run
+        url: https://github.com/linuxsimba/ansible-scale-testing
+        branch: concurrency
+  tasks:
+    - name: Create Organizations
+      import_role:
+        name: tower-organization
+      vars:
+        tower_org: testorg
+#    - import_role:
+#      - name: tower-project
+#        vars:
+#          tower_org: testorg
+#          tower_proj_name: "{{ project.name }}"
+#          tower_proj_desc: "{{ project.descr }}"
+#          tower_proj_url: "{{ project.url }}"
+#          tower_proj_branch: "{{ project.branch}}"
+#        with_items: "{{ projects }}"
+#        loop_control:
+#          loop_var:  project
