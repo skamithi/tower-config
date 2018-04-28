@@ -1,0 +1,32 @@
+---
+- name: get all project list data
+  command: >
+    {{ tower_cli }} project list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: project_list_details
+
+- name: get of installed list of projects names
+  set_fact:
+    installed_project_names: "{{ project_list_details.stdout|from_json|json_query('results[*].name') }}"
+
+- name: list of desired projects
+  set_fact:
+    desired_project_list: "{{ tower_projects|map(attribute='name')|list }}"
+
+- name: projects_to_delete
+  set_fact:
+    delete_project_list: "{{ installed_project_names|difference(desired_project_list)}}"
+
+- name: delete projects that are not defined
+  command: >
+    {{ tower_cli }} project delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ project|quote }}
+    -f json
+  register: project_status
+  changed_when: '"\"changed\": true" in project_status.stdout'
+  with_items: "{{ delete_project_list }}"
+  loop_control:
+    loop_var: project

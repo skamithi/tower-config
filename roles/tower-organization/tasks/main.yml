@@ -1,11 +1,4 @@
 ---
-- name: add Default org to each tower list
-  set_fact:
-    tower_orgs: "{{ tower_orgs | union(default_org_list) }}"
-  tags:
-    - organization
-    - cleanup
-
 - import_tasks: create.yml
   tags:
     - organization

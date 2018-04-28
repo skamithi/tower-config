@@ -8,7 +8,7 @@
     tower_url: "https://192.168.121.89"
     tower_user: "admin"
     tower_pass: "tower"
-    projects:
+    tower_projects:
       - name: Test run
         descr: Test run
         url: https://github.com/linuxsimba/ansible-scale-testing
@@ -19,3 +19,4 @@
       - name: testorg23
   roles:
     - tower-organization
+    - tower-project

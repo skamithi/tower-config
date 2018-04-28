@@ -1,5 +1,5 @@
 ---
-- name: "Create Project -- {{ project.name }}"
+- name: "Create Project"
   command: >
     {{ tower_cli }} project create
     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
@@ -7,7 +7,10 @@
     --scm-type {{ project.scm_type|default('git')|quote }}
     --scm-url {{ project.url|quote }}
     --scm-branch {{ project.branch|default('master')|quote }}
-    --organization {{ tower_org  }}
+    --organization {{ project.org  }}
     -f json
   register: project_status
   changed_when: '"\"changed\": true" in project_status.stdout'
+  with_items: "{{ tower_projects }}"
+  loop_control:
+    loop_var: project

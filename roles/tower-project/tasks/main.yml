@@ -1,3 +1,10 @@
 ---
-- import_tasks: "{{ tower_action }}.yml"
-  tags: projects
+- import_tasks: create.yml
+  tags:
+    - project
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - project
+    - cleanup

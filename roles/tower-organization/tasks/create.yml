@@ -1,12 +1,12 @@
 ---
-- name: "Create Organization - {{ tower_org }}"
+- name: "Create Organization"
   command: >
     {{ tower_cli }} organization create
     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-    --name {{ tower_org.name|quote }}
+    --name {{ org.name|quote }}
     -f json
   register: org_status
   changed_when: '"\"changed\": true" in org_status.stdout'
   with_items: "{{ tower_orgs }}"
   loop_control:
-    loop_var: tower_org
+    loop_var: org
