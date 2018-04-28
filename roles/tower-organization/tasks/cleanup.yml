@@ -1,0 +1,32 @@
+---
+- name: get all org list data
+  command: >
+    {{ tower_cli }} organization list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: org_list_details
+
+- name: get of installed list of org names
+  set_fact:
+    installed_org_names: "{{ org_list_details.stdout|from_json|json_query('results[*].name') }}"
+
+- name: list of desired orgs
+  set_fact:
+    desired_org_list: "{{ tower_orgs|map(attribute='name')|list }}"
+
+- name: organizations to delete
+  set_fact:
+    delete_org_list: "{{ installed_org_names|difference(desired_org_list)}}"
+
+- name: delete organizations that are not defined
+  command: >
+    {{ tower_cli }} organization delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ tower_org|quote }}
+    -f json
+  register: org_status
+  changed_when: '"\"changed\": true" in org_status.stdout'
+  with_items: "{{ delete_org_list }}"
+  loop_control:
+    loop_var: tower_org

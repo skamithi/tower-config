@@ -1,0 +1,13 @@
+---
+- name: "Create Project -- {{ project.name }}"
+  command: >
+    {{ tower_cli }} project create
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ project.name|quote }}
+    --scm-type {{ project.scm_type|default('git')|quote }}
+    --scm-url {{ project.url|quote }}
+    --scm-branch {{ project.branch|default('master')|quote }}
+    --organization {{ tower_org  }}
+    -f json
+  register: project_status
+  changed_when: '"\"changed\": true" in project_status.stdout'
