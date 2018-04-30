@@ -1,0 +1,10 @@
+---
+- include_tasks: create_single_job.yml
+  loop: "{{ tower_jobs }}"
+  loop_control:
+    loop_var: job
+  tags:
+    - job
+    - create
+
+

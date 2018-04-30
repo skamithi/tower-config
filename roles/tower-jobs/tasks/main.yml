@@ -1,0 +1,10 @@
+---
+- import_tasks: create.yml
+  tags:
+    - job
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - job
+    - cleanup

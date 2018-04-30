@@ -10,19 +10,6 @@
     register: inventory_status
     changed_when: '"\"changed\": true" in inventory_status.stdout'
 
-  - name: "Create Project for Inventory Source"
-    command: >
-      {{ tower_cli }} project create
-      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      --name {{ inventory.source.name|quote }}
-      --scm-type {{ inventory.source.scm_type|default('git')|quote }}
-      --scm-url {{ inventory.source.url|quote }}
-      --scm-branch {{ inventory.source.branch|default('master')|quote }}
-      --organization {{ inventory.org  }}
-      -f json
-    register: project_status
-    changed_when: '"\"changed\": true" in project_status.stdout'
-
   - name: Create Credential
     command: >
        {{ tower_cli }} credential create

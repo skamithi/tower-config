@@ -5,16 +5,19 @@
   vars:
     git_root: "https://github.com/skamithi"
     tower_cli: "/home/skamithi/tower-cli/bin/tower-cli"
-    tower_action: create
     tower_url: "https://192.168.121.89"
     tower_user: "admin"
     tower_pass: "tower"
     tower_projects:
-      - name: Test run
+      - name: testrun
         descr: Test run
         url: https://github.com/linuxsimba/ansible-scale-testing
         branch: concurrency
         org: testorg
+      - name: project_for_docker_inv
+        url: "{{ git_root }}/inventory-script-test"
+        org: testorg
+
     tower_orgs:
       - name: testorg
       - name: testorg23
@@ -25,14 +28,22 @@
         org: testorg
         username: root
     tower_inventories:
-      - name: my other inv
+      - name: mytestinv
         org: testorg
         source:
-          name: engineering dept
-          url: "{{ git_root }}/inventory-script-test"
+          name: project_for_docker_inv
           script: inventory.py
+    tower_jobs:
+      - name: first_run
+        inv: mytestinv
+        project: testrun
+        play: demo.yml
+        cred: docker_test
+
+
   roles:
     - tower-organization
     - tower-project
     - tower-credential
     - tower-inventory
+    - tower-jobs

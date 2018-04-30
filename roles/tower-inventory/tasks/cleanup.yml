@@ -13,7 +13,7 @@
 
 - name: list of desired inventories
   set_fact:
-    desired_org_list: "{{ tower_orgs|map(attribute='name')|list }}"
+    desired_org_list: "{{ tower_inventories|map(attribute='name')|list }}"
 
 - name: inventories to delete
   set_fact:
