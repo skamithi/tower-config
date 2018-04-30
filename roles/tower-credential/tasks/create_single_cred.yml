@@ -5,11 +5,13 @@
       state: file
       suffix: '.yaml'
     register: cred_input
+    changed_when: false
 
   - name: create cred input file in the temporary file
     template:
       src: "cred_{{cred.type}}.j2"
       dest: "{{ cred_input.path }}"
+    changed_when: false
 
   - name: "Create Credential"
     command: >
@@ -24,6 +26,7 @@
     file:
       state: absent
       path: "{{ cred_input.path }}"
+    changed_when: false
   tags:
     - credential
     - create

@@ -3,6 +3,7 @@
   connection: local
   gather_facts: no
   vars:
+    git_root: "https://github.com/skamithi"
     tower_cli: "/home/skamithi/tower-cli/bin/tower-cli"
     tower_action: create
     tower_url: "https://192.168.121.89"
@@ -23,6 +24,12 @@
         name: docker_test
         org: testorg
         username: root
+    tower_inventories:
+      - name: my inventory
+        source:
+          - name: engineering dept
+            scm_url: "{{ git_root }}/inventory-script-test"
+            script: inventory.py
   roles:
     - tower-organization
     - tower-project
