@@ -17,6 +17,13 @@
     tower_orgs:
       - name: testorg
       - name: testorg23
+    tower_creds:
+      - type: machine
+        key: "{{ vault_docker_test_key }}"
+        name: docker_test
+        org: testorg
+        username: root
   roles:
     - tower-organization
     - tower-project
+    - tower-credential

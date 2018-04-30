@@ -1,0 +1,6 @@
+---
+- name: Loop through credentials
+  include_tasks: create_single_cred.yml
+  with_items: "{{ tower_creds }}"
+  loop_control:
+    loop_var: cred

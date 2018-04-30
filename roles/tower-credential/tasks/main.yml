@@ -1,0 +1,10 @@
+---
+- import_tasks: create.yml
+  tags:
+    - credential
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - credential
+    - cleanup

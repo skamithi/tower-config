@@ -1,0 +1,31 @@
+---
+- block:
+  - name: Create a temporary file
+    tempfile:
+      build: file
+      suffix: '.json'
+    register: cred_input
+
+  - name: create cred input file in the temporary file
+    template:
+      src: "cred_{{cred.type}}.j2"
+      dest: "{{ cred_input.path }}"
+
+  - name: "Create Credential"
+    command: >
+      {{ tower_cli }} credential create
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      -f json --inputs @{{cred_input.path}} --credential-type {{ cred.type|capitalize}}
+      --organization {{ cred.org }} --name {{ cred.name }}
+    register: cred_status
+    changed_when: '"\"changed\": true" in cred_status.stdout'
+
+  - name: delete tempfile
+    file:
+      state: absent
+      path: "{{ cred_input.path }}"
+  tags:
+    - credential
+    - create
+
+
