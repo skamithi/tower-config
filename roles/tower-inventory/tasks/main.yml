@@ -1,0 +1,13 @@
+---
+- include_tasks: create.yml
+  loop: "{{ tower_inventories }}"
+  loop_control:
+    loop_var: inventory
+  tags:
+    - inventory
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - inventory
+    - cleanup

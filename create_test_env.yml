@@ -26,11 +26,13 @@
         username: root
     tower_inventories:
       - name: my inventory
+        org: testorg
         source:
-          - name: engineering dept
-            scm_url: "{{ git_root }}/inventory-script-test"
-            script: inventory.py
+          name: engineering dept
+          url: "{{ git_root }}/inventory-script-test"
+          script: inventory.py
   roles:
     - tower-organization
     - tower-project
     - tower-credential
+    - tower-inventory

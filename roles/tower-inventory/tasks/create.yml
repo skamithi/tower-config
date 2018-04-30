@@ -1,0 +1,57 @@
+---
+- block:
+  - name: "Create Inventory for {{ inventory.name }}"
+    command: >
+       {{ tower_cli }} inventory create
+       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --name {{ inventory.name|quote }}
+       --organization {{ inventory.org|default('Default')|quote }}
+       -f json
+    register: inventory_status
+    changed_when: '"\"changed\": true" in inventory_status.stdout'
+
+  - name: "Create Project for Inventory Source"
+    command: >
+      {{ tower_cli }} project create
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      --name {{ inventory.source.name|quote }}
+      --scm-type {{ inventory.source.scm_type|default('git')|quote }}
+      --scm-url {{ inventory.source.url|quote }}
+      --scm-branch {{ inventory.source.branch|default('master')|quote }}
+      --organization {{ inventory.org  }}
+      -f json
+    register: project_status
+    changed_when: '"\"changed\": true" in project_status.stdout'
+
+  - name: Create Credential
+    command: >
+       {{ tower_cli }} credential create
+       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --name {{ inventory.source.cred|quote }}
+       --organization {{ inventory.org|default('Default')|quote }}
+       --credential-type 'cloud'
+       --inputs {{ lookup('template', 'cloud_cred.j2')|quote }}
+       -f json
+    register: cred_status
+    changed_when: '"\"changed\": true" in cred_status.stdout'
+    when: inventory.source.cred is defined
+
+  - name: Create Inventory Source
+    command: >
+       {{ tower_cli }} inventory_source create
+       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --name {{ inventory.name|quote }}
+       --inventory {{ inventory.name|quote }}
+       --source {{ inventory.source.type|default('scm') }}
+       --source-project {{ inventory.source.name|quote }}
+       --source-path {{ inventory.source.script|quote }}
+       --update-on-launch {{ inventory.source.update_on_launch|default('false')|quote }}
+       --overwrite {{ inventory.source.overwrite|default('true')|quote }}
+       --overwrite-vars  {{ inventory.source.overwrite_vars|default('true')|quote }}
+       --update-cache-timeout {{ inventory.source.cache_timeout|default(10) }}
+       -f json
+    register: inventory_source_status
+    changed_when: '"\"changed\": true" in inventory_source_status.stdout'
+  tags:
+    - inventory
+    - create
