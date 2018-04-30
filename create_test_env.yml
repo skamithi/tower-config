@@ -25,7 +25,7 @@
         org: testorg
         username: root
     tower_inventories:
-      - name: my inventory
+      - name: my other inv
         org: testorg
         source:
           name: engineering dept

@@ -1,0 +1,33 @@
+---
+- name: get all inventory list data
+  command: >
+    {{ tower_cli }} inventory list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: inv_list_details
+
+- name: get of installed list of inventory names
+  set_fact:
+    installed_inv_names: "{{ inv_list_details.stdout|from_json|json_query('results[*].name') }}"
+
+- name: list of desired inventories
+  set_fact:
+    desired_org_list: "{{ tower_orgs|map(attribute='name')|list }}"
+
+- name: inventories to delete
+  set_fact:
+    delete_inv_list: "{{ installed_inv_names|difference(desired_org_list)}}"
+
+
+- name: delete inventories that are not defined
+  command: >
+    {{ tower_cli }} inventory delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ inventory|quote }}
+    -f json
+  register: inv_status
+  changed_when: '"\"changed\": true" in inv_status.stdout'
+  with_items: "{{ delete_inv_list }}"
+  loop_control:
+    loop_var: inventory
