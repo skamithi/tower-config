@@ -1,12 +1,12 @@
 ---
 - name: "Create Organization"
-  command: >
-    {{ tower_cli }} organization create
-    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-    --name {{ org.name|quote }}
-    -f json
-  register: org_status
-  changed_when: '"\"changed\": true" in org_status.stdout'
-  with_items: "{{ tower_orgs }}"
+  tower_organization:
+    state: present
+    tower_host: "{{ tower_url }}"
+    tower_password: "{{ tower_pass }}"
+    tower_username: "{{ tower_user }}"
+    tower_verify_ssl: false
+    name: "{{ org.name }}"
+  loop: "{{ tower_orgs }}"
   loop_control:
     loop_var: org
