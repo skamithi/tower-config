@@ -1,7 +1,0 @@
----
-username: "{{cred.username }}"
-{# cred key needs to convert newline to an actual \n text.
-so that's why the double backslash
-#}
-ssh_key_data: "{{ cred.key|replace('\n', "\\n") }}"
-

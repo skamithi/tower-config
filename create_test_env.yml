@@ -10,46 +10,20 @@
     tower_pass: "tower"
     default_user_pass: "1q2w3e4r"
     dns_domainname: "example.com"
-    tower_projects:
-      - name: testrun
-        descr: Test run
-        url: https://github.com/linuxsimba/ansible-scale-testing
-        branch: concurrency
-        org: testorg
-      - name: project_for_docker_inv
-        url: "{{ git_root }}/inventory-script-test"
-        org: testorg
-    tower_users:
-      - name: admin01
-        team: testorg-admins
-      - name: admin02
-        team: testorg-admins
-      - name: user01
-        team: testorg-users
-    tower_teams:
-      - name: testorg-admins
-        org: testorg
-      - name: testorg-users
-        org: testorg
     tower_orgs:
       - name: testorg
       - name: testorg23
     tower_creds:
       - type: machine
-        key: "{{ vault_docker_test_key }}"
         name: docker_test
         org: testorg
-        username: root
-    tower_inventories:
-      - name: mytestinv
-        org: testorg
-        source:
-          name: project_for_docker_inv
-          script: inventory.py
+        fields:
+          ssh_key_data: "{{ vault_docker_test_key }}"
+          username: root
     tower_jobs:
       - name: first_run
         inv: mytestinv
-        project: testrun
+        project: newrun
         play: demo.yml
         cred: docker_test
         team: testorg-admins

@@ -8,6 +8,7 @@
     --scm-url {{ project.url|quote }}
     --scm-branch {{ project.branch|default('master')|quote }}
     --organization {{ project.org  }}
+    --scm-update-on-launch true
     -f json
   register: project_status
   changed_when: '"\"changed\": true" in project_status.stdout'

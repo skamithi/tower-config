@@ -1,5 +1,8 @@
 ---
-- import_tasks: create.yml
+- include_tasks: create.yml
+  loop: "{{ tower_creds }}"
+  loop_control:
+    loop_var: cred
   tags:
     - credential
     - create

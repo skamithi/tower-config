@@ -1,0 +1,7 @@
+tower_inventories:
+  - name: mytestinv
+    org: testorg
+    source:
+      name: newrun
+      script: inventory.py
+

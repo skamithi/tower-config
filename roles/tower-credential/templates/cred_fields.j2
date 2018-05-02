@@ -1,0 +1,4 @@
+---
+{% for key,value in cred.fields.iteritems() %}
+{{ key }}: "{{ value|replace('\n', "\\n") }}"
+{% endfor %}

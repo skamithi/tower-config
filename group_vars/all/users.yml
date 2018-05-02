@@ -1,0 +1,8 @@
+tower_users:
+  - name: admin01
+    team: testorg-admins
+  - name: admin02
+    team: testorg-admins
+  - name: user01
+    team: testorg-users
+

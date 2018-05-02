@@ -6,6 +6,7 @@
       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
       --name {{ job.name }}
       --project {{ job.project }}
+      --playbook {{ job.play }}
       --job-type run
       --inventory {{ job.inv }}
       --forks {{ job.forks|default(5) }}
