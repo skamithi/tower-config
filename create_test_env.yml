@@ -52,6 +52,7 @@
         project: testrun
         play: demo.yml
         cred: docker_test
+        team: testorg-admins
 
 
   roles:

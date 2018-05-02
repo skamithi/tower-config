@@ -1,5 +1,8 @@
 ---
-- import_tasks: create.yml
+- include_tasks: create.yml
+  loop: "{{ tower_jobs }}"
+  loop_control:
+    loop_var: job
   tags:
     - job
     - create

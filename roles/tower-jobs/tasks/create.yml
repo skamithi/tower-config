@@ -1,10 +1,51 @@
 ---
-- include_tasks: create_single_job.yml
-  loop: "{{ tower_jobs }}"
-  loop_control:
-    loop_var: job
+- block:
+  - name: "Create Job Template - {{ job.name }}"
+    command: >
+      {{ tower_cli }} job_template create
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      --name {{ job.name }}
+      --project {{ job.project }}
+      --job-type run
+      --inventory {{ job.inv }}
+      --forks {{ job.forks|default(5) }}
+      --credential {{ job.cred }}
+      -f json
+    register: job
+    changed_when: '"\"changed\": true" in job.stdout'
+
+  rescue:
+    - name: "run project launch job for {{ job.name }}"
+      command: >
+        {{ tower_cli }} project update {{ job.project }}
+
+    - name: "Create Job Template - {{ job.name }}"
+      command: >
+        {{ tower_cli }} job_template create
+        -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+        --name {{ job.name }}
+        --project {{ job.project }}
+        --job-type run
+        --inventory {{ job.inv }}
+        --forks {{ job.forks|default(5) }}
+        --credential {{ job.cred }}
+        -f json
+      register: job
+      changed_when: '"\"changed\": true" in job.stdout'
   tags:
     - job
     - create
 
-
+- name: assign job template to an org team
+  command: >
+    {{ tower_cli }} role grant
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --team {{ job.team }}
+    --type {{ job.type|default('admin') }}
+    --job-template {{ job.name }}
+    -f json
+  register: job_perms
+  changed_when: '"\"changed\": true" in job_perms.stdout'
+  tags:
+    - job
+    - create
