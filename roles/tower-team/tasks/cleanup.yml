@@ -1,0 +1,32 @@
+---
+- name: get all team list data
+  command: >
+    {{ tower_cli }} team list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: team_list_details
+
+- name: get of installed list of team names
+  set_fact:
+    installed_team_names: "{{ team_list_details.stdout|from_json|json_query('results[*].name') }}"
+
+- name: desired team list
+  set_fact:
+    desired_team_list: "{{ tower_teams|map(attribute='name')|list }}"
+
+- name: teams to delete
+  set_fact:
+    delete_team_list: "{{ installed_team_names|difference(desired_team_list)}}"
+
+- name: delete organizations that are not defined
+  command: >
+    {{ tower_cli }} team delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ team|quote }}
+    -f json
+  register: team_status
+  changed_when: '"\"changed\": true" in org_status.stdout'
+  loop: "{{ delete_team_list }}"
+  loop_control:
+    loop_var: team

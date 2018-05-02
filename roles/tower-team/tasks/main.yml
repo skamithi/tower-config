@@ -1,8 +1,8 @@
 ---
 - include_tasks: create.yml
-  loop: "{{ tower_orgs }}"
+  loop: "{{ tower_teams }}"
   loop_control:
-    loop_var: org
+    loop_var: team
   tags:
     - team
     - create

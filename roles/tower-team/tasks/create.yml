@@ -1,9 +1,13 @@
 ---
-- name: "Create Organization"
-  tower_organization:
+- name: Create single team
+  tower_team:
     state: present
     tower_host: "{{ tower_url }}"
     tower_password: "{{ tower_pass }}"
     tower_username: "{{ tower_user }}"
     tower_verify_ssl: false
-    name: "{{ org.name }}"
+    name: "{{ team.name }}"
+    organization: "{{ team.org }}"
+  tags:
+    - team
+    - create

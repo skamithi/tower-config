@@ -8,6 +8,8 @@
     tower_url: "https://192.168.121.89"
     tower_user: "admin"
     tower_pass: "tower"
+    default_user_pass: "1q2w3e4r"
+    dns_domainname: "example.com"
     tower_projects:
       - name: testrun
         descr: Test run
@@ -17,7 +19,24 @@
       - name: project_for_docker_inv
         url: "{{ git_root }}/inventory-script-test"
         org: testorg
-
+    tower_users:
+      - name: admin01
+        team: testorg-admins
+        org: testorg
+      - name: admin02
+        team: testorg-admins
+        org: testorg
+      - name: user01
+        team: testorg-users
+        org: testorg
+      - name: user02
+        team: testorg-users
+        org: testorg
+    tower_teams:
+      - name: testorg-admins
+        org: testorg
+      - name: testorg-users
+        org: testorg
     tower_orgs:
       - name: testorg
       - name: testorg23
@@ -43,6 +62,7 @@
 
   roles:
     - tower-organization
+    - tower-team
     - tower-project
     - tower-credential
     - tower-inventory

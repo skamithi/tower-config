@@ -1,0 +1,46 @@
+- name: Create single team
+  tower_team:
+    state: present
+    tower_host: "{{ tower_url }}"
+    tower_password: "{{ tower_pass }}"
+    tower_username: "{{ tower_user }}"
+    tower_verify_ssl: false
+    name: "{{ team.name }}"
+    organization: "{{ org.name }}"
+  tags:
+    - organization
+    - create
+
+- name: Create Users to be assigned to the team
+  command: >
+      {{ tower_cli }} user create
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --username {{ user }}
+       --password {{ default_user_pass }}
+       --email {{ user }}@{{dns_domainname }}
+       -f json
+  register: user_output
+  changed_when: '"\"changed\": true" in user_output.stdout'
+  loop: "{{ team.users }}"
+  loop_control:
+    loop_var: user
+  tags:
+    - organization
+    - create
+
+- name: Create Associate Users to the team
+  command: >
+      {{ tower_cli }} team associate
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --user {{ user }}
+       --team {{ team.name }}
+       -f json
+  register: associate_output
+  changed_when: '"\"changed\": true" in associate_output.stdout'
+  loop: "{{ team.users }}"
+  loop_control:
+    loop_var: user
+  tags:
+    - organization
+    - create
+
