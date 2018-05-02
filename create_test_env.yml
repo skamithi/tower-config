@@ -10,9 +10,15 @@
     tower_pass: "tower"
     default_user_pass: "1q2w3e4r"
     dns_domainname: "example.com"
-    tower_orgs:
-      - name: testorg
-      - name: testorg23
+## uncomment to blank out the config ##
+    tower_orgs: []
+    tower_teams:  []
+    tower_users: []
+    tower_projects: []
+    tower_cred_types: []
+    tower_creds: []
+    tower_inventories: []
+    tower_jobs: []
 
 
 

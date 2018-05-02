@@ -1,1 +1,32 @@
 ---
+- name: get all cred type list data
+  command: >
+    {{ tower_cli }} credential_type list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: cred_type_list_details
+
+- name: get of installed list of cred type names
+  set_fact:
+    installed_cred_type_names: "{{ cred_type_list_details.stdout|from_json|json_query('results[?!managed_by_tower].name') }}"
+
+- name: list of desired Cred types
+  set_fact:
+    desired_cred_type_list: "{{ tower_cred_types|map(attribute='name')|list }}"
+
+- name: credentials to delete
+  set_fact:
+    delete_cred_type_list: "{{ installed_cred_type_names|difference(desired_cred_type_list)}}"
+
+- name: delete credentials that are not defined
+  command: >
+    {{ tower_cli }} credential_type delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --name {{ tower_cred|quote }}
+    -f json
+  register: cred_status
+  changed_when: '"\"changed\": true" in cred_status.stdout'
+  with_items: "{{ delete_cred_type_list }}"
+  loop_control:
+    loop_var: tower_cred
