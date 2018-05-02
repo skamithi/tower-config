@@ -1,0 +1,29 @@
+---
+- name: Create User
+  command: >
+    {{ tower_cli }} user create
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+     --username {{ user.name }}
+     --password {{ default_user_pass }}
+     --email {{ user.name }}@{{dns_domainname }}
+     -f json
+  register: user_output
+  changed_when: '"\"changed\": true" in user_output.stdout'
+  tags:
+    - user
+    - create
+
+- debug: msg="{{ user }}"
+
+- name: Create Associate Users to the team
+  command: >
+    {{ tower_cli }} team associate
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    --user {{ user.name }}
+    --team {{ user.team }}
+    -f json
+  register: associate_output
+  changed_when: '"\"changed\": true" in associate_output.stdout'
+  tags:
+    - user
+    - create

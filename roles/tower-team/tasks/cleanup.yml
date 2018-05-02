@@ -19,7 +19,7 @@
   set_fact:
     delete_team_list: "{{ installed_team_names|difference(desired_team_list)}}"
 
-- name: delete organizations that are not defined
+- name: delete teams that are not defined
   command: >
     {{ tower_cli }} team delete
     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}

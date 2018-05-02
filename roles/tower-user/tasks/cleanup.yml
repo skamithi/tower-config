@@ -1,0 +1,32 @@
+---
+- name: get all user list data
+  command: >
+    {{ tower_cli }} user list
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -f json
+  changed_when: false
+  register: user_list_details
+
+- name: get of installed list of user names
+  set_fact:
+    installed_user_names: "{{ user_list_details.stdout|from_json|json_query('results[*].username') }}"
+
+- name: desired user list
+  set_fact:
+    desired_user_list: "['admin'] + {{ tower_users|map(attribute='name')|list }}"
+
+- name: users to delete
+  set_fact:
+    delete_user_list: "{{ installed_user_names|difference(desired_user_list)}}"
+
+- name: delete user that are not defined
+  command: >
+    {{ tower_cli }} user delete
+    -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    {{ user|quote }}
+    -f json
+  register: user_status
+  changed_when: '"\"changed\": true" in user_status.stdout'
+  loop: "{{ delete_user_list }}"
+  loop_control:
+    loop_var: user

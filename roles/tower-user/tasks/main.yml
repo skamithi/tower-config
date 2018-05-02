@@ -1,0 +1,13 @@
+---
+- include_tasks: create.yml
+  loop: "{{ tower_users }}"
+  loop_control:
+    loop_var: user
+  tags:
+    - user
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - user
+    - cleanup

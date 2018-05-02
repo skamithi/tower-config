@@ -22,16 +22,10 @@
     tower_users:
       - name: admin01
         team: testorg-admins
-        org: testorg
       - name: admin02
         team: testorg-admins
-        org: testorg
       - name: user01
         team: testorg-users
-        org: testorg
-      - name: user02
-        team: testorg-users
-        org: testorg
     tower_teams:
       - name: testorg-admins
         org: testorg
@@ -63,6 +57,7 @@
   roles:
     - tower-organization
     - tower-team
+    - tower-user
     - tower-project
     - tower-credential
     - tower-inventory
