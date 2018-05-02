@@ -1,0 +1,8 @@
+tower_jobs:
+  - name: second_run
+    inv: mytestinv2
+    project: newrun
+    play: demo.yml
+    cred: docker_machine_creds
+    team: testorg-admins
+

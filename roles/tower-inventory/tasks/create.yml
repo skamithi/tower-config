@@ -10,20 +10,7 @@
     register: inventory_status
     changed_when: '"\"changed\": true" in inventory_status.stdout'
 
-  - name: Create Credential
-    command: >
-       {{ tower_cli }} credential create
-       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-       --name {{ inventory.source.cred|quote }}
-       --organization {{ inventory.org|default('Default')|quote }}
-       --credential-type 'cloud'
-       --inputs {{ lookup('template', 'cloud_cred.j2')|quote }}
-       -f json
-    register: cred_status
-    changed_when: '"\"changed\": true" in cred_status.stdout'
-    when: inventory.source.cred is defined
-
-  - name: Create Inventory Source
+  - name: Create Inventory Source - With Creds
     command: >
        {{ tower_cli }} inventory_source create
        -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
@@ -36,9 +23,31 @@
        --overwrite {{ inventory.source.overwrite|default('true')|quote }}
        --overwrite-vars  {{ inventory.source.overwrite_vars|default('true')|quote }}
        --update-cache-timeout {{ inventory.source.cache_timeout|default(10) }}
+       --credential {{ inventory.source.cred|quote }}
        -f json
     register: inventory_source_status
     changed_when: '"\"changed\": true" in inventory_source_status.stdout'
+    when: inventory.source.cred is defined
+
+  - name: Create Inventory Source Without creds
+    command: >
+       {{ tower_cli }} inventory_source create
+       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+       --name {{ inventory.name|quote }}
+       --inventory {{ inventory.name|quote }}
+       --source {{ inventory.source.type|default('scm') }}
+       --source-project {{ inventory.source.name|quote }}
+       --source-path {{ inventory.source.script|quote }}
+       --update-on-launch {{ inventory.source.update_on_launch|default('false')|quote }}
+       --overwrite {{ inventory.source.overwrite|default('true')|quote }}
+       --overwrite-vars  {{ inventory.source.overwrite_vars|default('true')|quote }}
+       --update-cache-timeout {{ inventory.source.cache_timeout|default(10) }}
+       --credential {{ inventory.source.cred }}
+       -f json
+    register: inventory_source_status
+    changed_when: '"\"changed\": true" in inventory_source_status.stdout'
+    when: inventory.source.cred is not defined
+
   tags:
     - inventory
     - create

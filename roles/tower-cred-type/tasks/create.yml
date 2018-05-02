@@ -1,0 +1,18 @@
+---
+- name: Create Credential Type
+  command: >
+     {{ tower_cli }} credential_type create
+     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+     --name {{ credtype.name|quote }}
+     --kind cloud
+     --inputs {{ lookup('template', 'cred_inputs.j2')|quote }}
+     --injectors {{ lookup('template', 'cred_injectors.j2')|quote }}
+     -f json
+  register: cred_type_status
+  changed_when: '"\"changed\": true" in cred_type_status.stdout'
+  tags:
+    - credtype
+    - create
+
+
+

@@ -1,0 +1,29 @@
+tower_cred_types:
+  - name: docker_inv_credtype2
+    input_fields:
+      - id: docker_host
+        label: Docker Host
+
+      - id: host_count
+        secret: false
+        label: Host Count
+    injector_fields:
+      env:
+        - "DOCKER_HOST"
+        - "HOST_COUNT"
+      extra_vars: []
+
+tower_creds:
+  - type: Machine
+    name: docker_machine_creds
+    org: testorg
+    fields:
+      ssh_key_data: "{{ vault_docker_test_key }}"
+      username: root
+  - type: docker_inv_credtype2
+    name: 'inventory creds2'
+    org: testorg
+    fields:
+      docker_host: '192.168.121.1'
+      host_count: 100
+

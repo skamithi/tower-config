@@ -1,7 +1,7 @@
 tower_inventories:
-  - name: mytestinv
+  - name: mytestinv2
     org: testorg
     source:
       name: newrun
       script: inventory.py
-
+      cred: 'inventory creds2'

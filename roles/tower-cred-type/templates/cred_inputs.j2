@@ -1,0 +1,8 @@
+---
+fields:
+{% for entry in credtype.input_fields %}
+  - type: {{ entry.type|default('string') }}
+    id: {{ entry.id }}
+    secret: {{ entry.secret|default(false) }}
+    label: {{ entry.label|default('')|quote }}
+{% endfor %}

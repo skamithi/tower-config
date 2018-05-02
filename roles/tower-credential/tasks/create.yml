@@ -17,7 +17,7 @@
     command: >
       {{ tower_cli }} credential create
       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      -f json --inputs @{{cred_input.path|quote}} --credential-type {{ cred.type|capitalize}}
+      -f json --inputs @{{cred_input.path|quote}} --credential-type {{ cred.type}}
       --organization {{ cred.org|quote }} --name {{ cred.name|quote }}
     register: cred_status
     changed_when: '"\"changed\": true" in cred_status.stdout'

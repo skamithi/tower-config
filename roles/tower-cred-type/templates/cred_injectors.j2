@@ -1,0 +1,14 @@
+---
+{% if credtype.injector_fields.env: %}
+env:
+{% for entry in credtype.injector_fields.env %}
+  {{ entry }}: {{ '"{{' }} {{ entry|lower }} {{ '}}"' }}
+{% endfor %}
+{% endif %}
+
+{% if credtype.injector_fields.extra_vars: %}
+extra_vars:
+{% for entry in credtype.injector_fields.extra_vars %}
+  {{ entry }}: {{ '"{{' }} {{ entry|lower }} {{ '}}"' }}
+{% endfor %}
+{% endif %}

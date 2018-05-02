@@ -1,0 +1,13 @@
+---
+- include_tasks: create.yml
+  loop: "{{ tower_cred_types }}"
+  loop_control:
+    loop_var: credtype
+  tags:
+    - credtype
+    - create
+
+- import_tasks: cleanup.yml
+  tags:
+    - credtype
+    - cleanup

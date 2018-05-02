@@ -13,20 +13,7 @@
     tower_orgs:
       - name: testorg
       - name: testorg23
-    tower_creds:
-      - type: machine
-        name: docker_test
-        org: testorg
-        fields:
-          ssh_key_data: "{{ vault_docker_test_key }}"
-          username: root
-    tower_jobs:
-      - name: first_run
-        inv: mytestinv
-        project: newrun
-        play: demo.yml
-        cred: docker_test
-        team: testorg-admins
+
 
 
   roles:
@@ -34,6 +21,7 @@
     - tower-team
     - tower-user
     - tower-project
+    - tower-cred-type
     - tower-credential
     - tower-inventory
     - tower-jobs
