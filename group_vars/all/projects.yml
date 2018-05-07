@@ -1,11 +1,6 @@
 tower_projects:
-  - name: newrun
-    descr: Test run
+  - name: scale_test_repo
+    descr: Scale Test Repo
     url: "{{ git_root }}/ansible-scale-testing"
-    branch: concurrency
+    branch: master
     org: testorg
-
-  - name: inventory_script
-    url: "{{ git_root }}/inventory-script-test"
-    org: testorg
-

@@ -1,7 +1,7 @@
 tower_inventories:
-  - name: mytestinv2
+  - name: docker_test_inventory
     org: testorg
     source:
-      name: newrun
+      name: scale_test_repo
       script: inventory.py
-      cred: 'inventory creds2'
+      cred: docker_test_inventory

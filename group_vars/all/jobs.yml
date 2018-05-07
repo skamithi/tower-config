@@ -1,7 +1,7 @@
 tower_jobs:
-  - name: second_run
-    inv: mytestinv2
-    project: newrun
+  - name: test run
+    inv:  docker_test_inventory
+    project:  scale_test_repo
     play: demo.yml
     cred: docker_machine_creds
     team: testorg-admins

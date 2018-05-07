@@ -1,5 +1,5 @@
 tower_cred_types:
-  - name: docker_inv_credtype2
+  - name: test_inventory_cred_type
     input_fields:
       - id: docker_host
         label: Docker Host
@@ -7,10 +7,16 @@ tower_cred_types:
       - id: host_count
         secret: false
         label: Host Count
+      - id: software_groups
+        label: Software Groups
+      - id: environment_groups
+        label:  Environment Groups
     injector_fields:
       env:
         - "DOCKER_HOST"
         - "HOST_COUNT"
+        - "SOFTWARE_GROUPS"
+        - "ENVIRONMENT_GROUPS"
       extra_vars: []
 
 tower_creds:
@@ -20,10 +26,11 @@ tower_creds:
     fields:
       ssh_key_data: "{{ vault_docker_test_key }}"
       username: root
-  - type: docker_inv_credtype2
-    name: 'inventory creds2'
+  - type: test_inventory_cred_type
+    name: docker_test_inventory
     org: testorg
     fields:
       docker_host: '192.168.121.1'
-      host_count: 100
-
+      host_count: 20
+      software_groups: 'weblogic,java,tomcat'
+      environment_groups: 'test,stage,prod'

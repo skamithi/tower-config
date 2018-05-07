@@ -13,8 +13,6 @@
     - user
     - create
 
-- debug: msg="{{ user }}"
-
 - name: Create Associate Users to the team
   command: >
     {{ tower_cli }} team associate

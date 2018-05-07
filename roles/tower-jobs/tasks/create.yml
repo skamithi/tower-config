@@ -4,9 +4,9 @@
     command: >
       {{ tower_cli }} job_template create
       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      --name {{ job.name }}
-      --project {{ job.project }}
-      --playbook {{ job.play }}
+      --name {{ job.name|quote }}
+      --project {{ job.project|quote }}
+      --playbook {{ job.play|quote }}
       --job-type run
       --inventory {{ job.inv }}
       --forks {{ job.forks|default(5) }}
@@ -24,10 +24,10 @@
       command: >
         {{ tower_cli }} job_template create
         -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-        --name {{ job.name }}
-        --project {{ job.project }}
+        --name {{ job.name|quote }}
+        --project {{ job.project|quote }}
         --job-type run
-        --inventory {{ job.inv }}
+        --inventory {{ job.inv|quote }}
         --forks {{ job.forks|default(5) }}
         --credential {{ job.cred }}
         -f json
@@ -41,9 +41,9 @@
   command: >
     {{ tower_cli }} role grant
     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-    --team {{ job.team }}
+    --team {{ job.team|quote }}
     --type {{ job.type|default('admin') }}
-    --job-template {{ job.name }}
+    --job-template {{ job.name|quote }}
     -f json
   register: job_perms
   changed_when: '"\"changed\": true" in job_perms.stdout'
