@@ -1,4 +1,9 @@
 ---
+- name: set tower_jobs var if test_run is enabled
+  set_fact:
+    tower_jobs: "{{ lookup('template', 'test_jobs.j2') }}"
+  when: test_run is defined
+
 - include_tasks: create.yml
   loop: "{{ tower_jobs }}"
   loop_control:

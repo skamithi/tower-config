@@ -6,3 +6,9 @@ tower_jobs:
     cred: docker_machine_creds
     team: testorg-admins
 
+test_run_host_count: 20
+test_run_inv: docker_test_inventory
+test_run_project: scale_test_repo
+test_run_play: "test_run.yml"
+test_run_creds: "docker_machine_creds"
+test_run_group_allowed: "testorg-users"
