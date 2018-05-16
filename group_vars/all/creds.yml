@@ -31,6 +31,6 @@ tower_creds:
     org: testorg
     fields:
       docker_host: '192.168.121.1'
-      host_count: 20
+      host_count: 30
       software_groups: 'weblogic,java,tomcat'
       environment_groups: 'test,stage,prod'

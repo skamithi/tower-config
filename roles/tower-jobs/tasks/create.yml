@@ -12,7 +12,7 @@
       --inventory {{ job.inv }}
       --forks {{ job.forks|default(5) }}
       --credential {{ job.cred }}
-      --limit {{ job.limit|default("") }}
+      --limit {{ job.limit|default("all") }}
       -f json
     register: job
     changed_when: '"\"changed\": true" in job.stdout'

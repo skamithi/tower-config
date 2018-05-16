@@ -6,6 +6,7 @@
      --username {{ user.name }}
      --password {{ default_user_pass }}
      --email {{ user.name }}@{{dns_domainname }}
+     --is-system-auditor {{user.auditor|default(false) }}
      -f json
   register: user_output
   changed_when: '"\"changed\": true" in user_output.stdout'

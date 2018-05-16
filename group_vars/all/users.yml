@@ -1,4 +1,7 @@
 tower_users:
+  - name: auditor01
+    team: testorg-admins
+    auditor: true
   - name: admin01
     team: testorg-admins
   - name: admin02

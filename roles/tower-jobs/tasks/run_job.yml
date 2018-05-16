@@ -1,0 +1,27 @@
+---
+
+- block:
+  - name: get all job_template list data
+    command: >
+      {{ tower_cli }} job_template list
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      -f json
+    changed_when: false
+    register: job_template_list_details
+
+  - name: get of installed list of job_templates names
+    set_fact:
+      installed_job_template_names: "{{ job_template_list_details.stdout|from_json|json_query('results[*].name') }}"
+
+  - name: "Run Job"
+    command: >
+      {{ tower_cli }} job launch
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      -J {{item }}
+      -f json
+    register: job
+    changed_when: '"\"changed\": true" in job.stdout'
+    with_items: "{{ installed_job_template_names }}"
+
+  tags:
+    - run_job

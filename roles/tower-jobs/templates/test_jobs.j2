@@ -1,10 +1,9 @@
-tower_jobs:
-{% for n in range(1, test_run_host_count+1) %}
-  - name: "run_job_on_{{n}}"
-    inv:  "{{ test_run_inv }}"
-    project: "{{ test_run_project }}"
-    play: "{{test_run_play}}"
-    cred: "{{ test_run_creds }}"
-    team: "{{ test_run_group_allowed }}"
-    limit: "ts_{{ "%02d"|format(n) }}"
+{% for n in range(1, test_run_host_count|int +1) %}
+- name: "run_job_on_{{n}}"
+  inv:  "{{ test_run_inv }}"
+  project: "{{ test_run_project }}"
+  play: "{{test_run_play}}"
+  cred: "{{ test_run_creds }}"
+  team: "{{ test_run_group_allowed }}"
+  limit: "ts{{ "%02d"|format(n) }}"
 {% endfor %}
