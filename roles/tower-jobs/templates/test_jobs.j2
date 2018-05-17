@@ -1,9 +1,9 @@
 {% for n in range(1, test_run_host_count|int +1) %}
 {% for m in binfiles_to_copy %}
-- name: "run_job{{m}}_on_ts{{ "02d"|format(n)}}"
+- name: "run_job_{{m}}_on_ts{{ "%02d"|format(n)}}"
   inv:  "{{ test_run_inv }}"
   project: "{{ test_run_project }}"
-  play: "{{test_run}}.yml"
+  play: "{{test_run_play}}.yml"
   cred: "{{ test_run_creds }}"
   team: "{{ test_run_group_allowed }}"
   limit: "ts{{ "%02d"|format(n) }}"
