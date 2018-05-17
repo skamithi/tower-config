@@ -4,6 +4,7 @@
     command: >
       {{ tower_cli }} job list
       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      -a
       -f json
     changed_when: false
     register: job_list_details
@@ -38,6 +39,7 @@
   command: >
     {{ tower_cli }} job_template list
     -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+    -a
     -f json
   changed_when: false
   register: job_template_list_details
