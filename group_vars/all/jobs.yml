@@ -6,9 +6,23 @@ tower_jobs:
     cred: docker_machine_creds
     team: testorg-admins
 
+binfiles_to_copy:
+  - ls
+  - gunzip
+  - bzgrep
+  - egrep
+  - zmore
+  - bzmore
+  - zforce
+  - bzless
+  - zgrep
+  - sed
+  - uname
+
 test_run_host_count: 20
+test_run_count: 10
 test_run_inv: docker_test_inventory
 test_run_project: scale_test_repo
-test_run_play: "test_run.yml"
+test_run_play: "testrun"
 test_run_creds: "docker_machine_creds"
 test_run_group_allowed: "testorg-users"

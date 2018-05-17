@@ -22,6 +22,7 @@
 
 
   roles:
+    - tower-jobs
     - tower-organization
     - tower-team
     - tower-user
@@ -29,4 +30,3 @@
     - tower-cred-type
     - tower-credential
     - tower-inventory
-    - tower-jobs

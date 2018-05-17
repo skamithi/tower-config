@@ -13,6 +13,7 @@
       --forks {{ job.forks|default(5) }}
       --credential {{ job.cred }}
       --limit {{ job.limit|default("all") }}
+      -e "binfile={{job.binfile|default('ls')}}"
       -f json
     register: job
     changed_when: '"\"changed\": true" in job.stdout'

@@ -1,4 +1,39 @@
 ---
+- block:
+  - name: get list of jobs
+    command: >
+      {{ tower_cli }} job list
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      -f json
+    changed_when: false
+    register: job_list_details
+
+  - name: get of  list of job ID
+    set_fact:
+      job_ids : "{{ job_list_details.stdout|from_json|json_query('results[*].id') }}"
+
+  - name: cancel all jobs
+    command: >
+      {{ tower_cli }} job cancel
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      {{ job_id }}
+      -f json
+    loop: "{{ job_ids }}"
+    loop_control:
+      loop_var: job_id
+
+  - name: clean out all job runs
+    command: >
+      {{ tower_cli }} job delete
+      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
+      {{ job_id }}
+      -f json
+    loop: "{{ job_ids }}"
+    loop_control:
+      loop_var: job_id
+
+  when: tower_jobs == []
+
 - name: get all job_template list data
   command: >
     {{ tower_cli }} job_template list
@@ -32,27 +67,4 @@
     loop_var: job_template
 
 
-- block:
-  - name: get list of jobs
-    command: >
-      {{ tower_cli }} job list
-      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      -f json
-    changed_when: false
-    register: job_list_details
 
-  - name: get of  list of job ID
-    set_fact:
-      job_ids : "{{ job_list_details.stdout|from_json|json_query('results[*].id') }}"
-
-  - name: clean out all job runs
-    command: >
-      {{ tower_cli }} job delete
-      -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      {{ job_id }}
-      -f json
-    loop: "{{ job_ids }}"
-    loop_control:
-      loop_var: job_id
-
-  when: tower_jobs == []
