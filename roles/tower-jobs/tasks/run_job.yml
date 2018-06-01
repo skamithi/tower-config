@@ -17,7 +17,7 @@
     command: >
       {{ tower_cli }} job launch
       -h {{ tower_url }} -u {{ tower_user }} -p {{ tower_pass }}
-      -J {{item }}
+      -J {{item|quote }}
       -f json
     register: job
     changed_when: '"\"changed\": true" in job.stdout'
